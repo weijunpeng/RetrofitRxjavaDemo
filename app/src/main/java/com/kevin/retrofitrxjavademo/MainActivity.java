@@ -78,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onArticleClick(View view) {
-        Random random = new Random();
-        int id = random.nextInt(5) + 1;
-        HttpHelper.request(mSubscriptions, HttpBuilder.getAPIService().getArticleList2(2, id))
+        HttpHelper.request(mSubscriptions, HttpBuilder.getAPIService().getArticleList2(10, 1))
                 .subscribe(new Consumer<ArticleListResult>() {
                     @Override
                     public void accept(ArticleListResult articleListResult) {
                         // 处理返回数据
-                        mTvContent.setText(articleListResult.list.get(0).content);
+                        Random random = new Random();
+                        int index = random.nextInt(10);
+                        mTvContent.setText(articleListResult.list.get(index).content);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
