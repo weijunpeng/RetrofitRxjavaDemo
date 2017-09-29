@@ -21,10 +21,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.kevin.retrofitrxjavademo.model.data.ArticleRepository;
+import com.kevin.retrofitrxjavademo.model.data.JokeRepository;
 import com.kevin.retrofitrxjavademo.model.entity.ArticleListResult;
 import com.kevin.retrofitrxjavademo.model.entity.JokeResult;
-import com.kevin.retrofitrxjavademo.model.net.HttpBuilder;
-import com.kevin.retrofitrxjavademo.model.net.HttpHelper;
 
 import java.util.Random;
 
@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTvContent;
     CompositeDisposable mSubscriptions;
-
+    JokeRepository mJokeRepository;
+    ArticleRepository mArticleRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,29 +57,30 @@ public class MainActivity extends AppCompatActivity {
         this.mTvContent = (TextView) this.findViewById(R.id.tv_content);
 
         mSubscriptions = new CompositeDisposable();
+        mJokeRepository = new JokeRepository(mSubscriptions);
+        mArticleRepository = new ArticleRepository(mSubscriptions);
     }
 
     public void onJokeClick(View view) {
         Random random = new Random();
         int id = random.nextInt(11);
-        HttpHelper.request(mSubscriptions, HttpBuilder.getAPIService().getJokeById1(id))
+        mJokeRepository.getJokeById1(id)
                 .subscribe(new Consumer<JokeResult>() {
                     @Override
                     public void accept(JokeResult jokeResult) {
                         // 处理返回数据
-                        mTvContent.setText(jokeResult.joke);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         // 处理错误数据
-                        Log.e(TAG, "accept() called with: throwable = [" + throwable + "]");
                     }
                 });
+
     }
 
     public void onArticleClick(View view) {
-        HttpHelper.request(mSubscriptions, HttpBuilder.getAPIService().getArticleList2(10, 1))
+        mArticleRepository.getArticleList1(10, 1)
                 .subscribe(new Consumer<ArticleListResult>() {
                     @Override
                     public void accept(ArticleListResult articleListResult) {
@@ -94,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, "accept() called with: throwable = [" + throwable + "]");
                     }
                 });
-
 
     }
 

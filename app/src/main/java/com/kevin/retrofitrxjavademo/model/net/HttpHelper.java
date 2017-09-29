@@ -42,6 +42,7 @@ import timber.log.Timber;
 
 public class HttpHelper {
 
+    @SuppressWarnings("unchecked")
     public static <T> Observable<T> request(final CompositeDisposable subscriptions,
                                             final Observable<HttpResult<T>> observable) {
         final RequestDisposable disposableWrap = new RequestDisposable();

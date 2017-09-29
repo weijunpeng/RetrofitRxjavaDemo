@@ -55,7 +55,7 @@ public class ResultTransform<T> implements Function<HttpResult<T>, T> {
     @Override
     public T apply(@NonNull HttpResult<T> httpResult) throws Exception {
         if (!"OK".equals(httpResult.status)) {
-            throw new APIException(httpResult.status, httpResult.msg);
+            throw new ApiException(httpResult.status, httpResult.msg);
         }
         try {
             String json = gson.toJson(httpResult);

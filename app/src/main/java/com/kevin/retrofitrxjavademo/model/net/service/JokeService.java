@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kevin.retrofitrxjavademo.model.net;
+package com.kevin.retrofitrxjavademo.model.net.service;
 
-import com.kevin.retrofitrxjavademo.model.entity.ArticleListResult;
 import com.kevin.retrofitrxjavademo.model.entity.HttpResult;
 import com.kevin.retrofitrxjavademo.model.entity.JokeResult;
 
@@ -27,28 +26,16 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
- * APIService
+ * JokeService
  *
- * @author zwenkai@foxmail.com ,Created on 2017-09-21 00:05:51
- *         Major Function：<b>Web API</b>
+ * @author zwenkai@foxmail.com ,Created on 2017-09-29 11:31:09
+ *         Major Function：<b>Joke WEB API</b>
  *         <p/>
  *         注:如果您修改了本类请填写以下内容作为记录，如非本人操作劳烦通知，谢谢！！！
  * @author mender，Modified Date Modify Content:
  */
 
-public interface APIService {
-
-    @GET("getArticleList")
-    Observable<HttpResult<ArticleListResult>> getArticleList1(
-            @Query("pageSize") int pageSize,
-            @Query("page") int page);
-
-
-    @FormUrlEncoded
-    @POST("getArticleList")
-    Observable<HttpResult<ArticleListResult>> getArticleList2(
-            @Field("pageSize") int pageSize,
-            @Field("page") int page);
+public interface JokeService {
 
     @GET("getJoke")
     Observable<HttpResult<JokeResult>> getJokeById1(

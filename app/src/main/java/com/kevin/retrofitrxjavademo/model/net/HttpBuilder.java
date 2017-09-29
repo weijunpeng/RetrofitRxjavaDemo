@@ -18,6 +18,8 @@ package com.kevin.retrofitrxjavademo.model.net;
 
 import com.kevin.retrofitrxjavademo.app.ConfigKeys;
 import com.kevin.retrofitrxjavademo.app.GlobalConfig;
+import com.kevin.retrofitrxjavademo.model.net.service.ArticleService;
+import com.kevin.retrofitrxjavademo.model.net.service.JokeService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -86,11 +88,15 @@ public class HttpBuilder {
      * Service接口
      */
     private static final class ServiceHolder {
-        private static final APIService API_SERVICE = RetrofitHolder.RETROFIT_CLIENT.create(APIService.class);
+        private static final JokeService JOKE_SERVICE = RetrofitHolder.RETROFIT_CLIENT.create(JokeService.class);
+        private static final ArticleService ARTICLE_SERVICE = RetrofitHolder.RETROFIT_CLIENT.create(ArticleService.class);
     }
 
-    public static APIService getAPIService() {
-        return ServiceHolder.API_SERVICE;
+    public static JokeService getJokeService() {
+        return ServiceHolder.JOKE_SERVICE;
     }
 
+    public static ArticleService getArticleService() {
+        return ServiceHolder.ARTICLE_SERVICE;
+    }
 }

@@ -13,33 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kevin.retrofitrxjavademo.model.net;
+package com.kevin.retrofitrxjavademo.model.data;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
- * APIException
+ * DataRepository
  *
- * @author zwenkai@foxmail.com ,Created on 2017-08-10 22:37:35
- *         Major Function：<b>网络异常</b>
+ * @author zwenkai@foxmail.com ,Created on 2017-09-29 18:49:14
+ *         Major Function：<b>Data Repository</b>
  *         <p/>
  *         注:如果您修改了本类请填写以下内容作为记录，如非本人操作劳烦通知，谢谢！！！
  * @author mender，Modified Date Modify Content:
  */
 
-public class APIException extends RuntimeException {
+public abstract class DataRepository {
 
-    private String errStatus;
-    private String errMessage;
+    protected CompositeDisposable mSubscriptions;
 
-    public APIException(String errStatus, String errMessage) {
-        this.errStatus = errStatus;
-        this.errMessage = errMessage;
-    }
-
-    public String getErrorStatus() {
-        return errStatus;
-    }
-
-    public String getErrorMessage() {
-        return errMessage;
+    public DataRepository(CompositeDisposable subscriptions) {
+        this.mSubscriptions = subscriptions;
     }
 }
