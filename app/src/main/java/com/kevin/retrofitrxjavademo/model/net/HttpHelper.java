@@ -42,9 +42,22 @@ import timber.log.Timber;
 
 public class HttpHelper {
 
-    @SuppressWarnings("unchecked")
     public static <T> Observable<T> request(final CompositeDisposable subscriptions,
                                             final Observable<HttpResult<T>> observable) {
+        return request(subscriptions, observable, null, null);
+    }
+
+    public static <T> Observable<T> request(final CompositeDisposable subscriptions,
+                                            final Observable<HttpResult<T>> observable,
+                                            final Consumer<T> success) {
+        return request(subscriptions, observable, success, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Observable<T> request(final CompositeDisposable subscriptions,
+                                            final Observable<HttpResult<T>> observable,
+                                            final Consumer<T> success,
+                                            final Consumer<Throwable> error) {
         final RequestDisposable disposableWrap = new RequestDisposable();
         return Observable.create(new ObservableOnSubscribe<T>() {
             @Override
@@ -60,10 +73,14 @@ public class HttpHelper {
                                     public void accept(Object o) throws Exception {
                                         if (o instanceof Throwable) {
                                             e.onError((Throwable) o);
-                                            Timber.tag("HttpHelper.request() ==> onNext()").w((Throwable) o);
+                                            Timber.tag("HttpHelper.request()").w((Throwable) o);
                                         } else {
                                             e.onNext((T) o);
                                             e.onComplete();
+
+                                            if (null != success) {
+                                                success.accept((T) o);
+                                            }
                                         }
                                     }
                                 },
@@ -73,8 +90,12 @@ public class HttpHelper {
                                         if (null != disposableWrap.disposable) {
                                             subscriptions.remove(disposableWrap.disposable);
                                         }
-                                        Timber.tag("HttpHelper.request() ==> onError()").w(throwable);
+                                        Timber.tag("HttpHelper.request()").w(throwable);
                                         e.onError(throwable);
+
+                                        if (null != error) {
+                                            error.accept(throwable);
+                                        }
                                     }
                                 },
                                 new Action() {

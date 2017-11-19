@@ -15,12 +15,16 @@
  */
 package com.kevin.retrofitrxjavademo.model.data;
 
+import com.kevin.hannibai.Hannibai;
 import com.kevin.retrofitrxjavademo.model.entity.ArticleListResult;
 import com.kevin.retrofitrxjavademo.model.net.HttpBuilder;
 import com.kevin.retrofitrxjavademo.model.net.HttpHelper;
+import com.kevin.retrofitrxjavademo.preference.DemoPreferenceHandle;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * ArticleRepository
@@ -34,12 +38,28 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class ArticleRepository extends DataRepository {
 
+    private DemoPreferenceHandle mPreferenceHandle;
+
     public ArticleRepository(CompositeDisposable subscriptions) {
         super(subscriptions);
+        mPreferenceHandle = Hannibai.create(DemoPreferenceHandle.class);
     }
 
     public Observable<ArticleListResult> getArticleList1(int pageSize, int page) {
-        return HttpHelper.request(mSubscriptions, HttpBuilder.getArticleService().getArticleList1(pageSize, page));
+        if (mPreferenceHandle.containsArticleListResult()) {
+            Timber.tag("Fuck").d("sp获取");
+            return mPreferenceHandle.getArticleListResult1();
+        }
+
+        Timber.tag("Fuck").d("网络 获取");
+        return HttpHelper.request(mSubscriptions,
+                HttpBuilder.getArticleService().getArticleList1(pageSize, page),
+                new Consumer<ArticleListResult>() {
+                    @Override
+                    public void accept(ArticleListResult articleListResult) throws Exception {
+                        mPreferenceHandle.setArticleListResult(articleListResult);
+                    }
+                });
     }
 
     public Observable<ArticleListResult> getArticleList2(int pageSize, int page) {

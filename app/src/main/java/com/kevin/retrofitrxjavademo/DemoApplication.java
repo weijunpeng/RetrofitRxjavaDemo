@@ -17,12 +17,14 @@ package com.kevin.retrofitrxjavademo;
 
 import android.app.Application;
 
+import com.kevin.hannibai.Hannibai;
+import com.kevin.hannibai.converter.gson.GsonConverterFactory;
 import com.kevin.retrofitrxjavademo.app.GlobalConfig;
 
 import timber.log.Timber;
 
 /**
- * DomoApplication
+ * DemoApplication
  *
  * @author zwenkai@foxmail.com ,Created on 2017-09-28 20:08:06
  *         Major Function：<b>Application</b>
@@ -31,7 +33,7 @@ import timber.log.Timber;
  * @author mender，Modified Date Modify Content:
  */
 
-public class DomoApplication extends Application {
+public class DemoApplication extends Application {
 
     @Override
     public void onCreate() {
@@ -45,5 +47,9 @@ public class DomoApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        Hannibai.init(this);
+        Hannibai.setDebug(true);
+        Hannibai.setConverterFactory(GsonConverterFactory.create());
     }
 }

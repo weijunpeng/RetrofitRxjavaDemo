@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void accept(JokeResult jokeResult) {
                         // 处理返回数据
+                        mTvContent.setText(jokeResult.joke);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
